@@ -1,28 +1,33 @@
 name: CI Workflow
 
 on:
-   push:
-        branches:
-           - main
-   pull_request:
-        branches:
-           - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '45 6 * * *'  # Runs at 6:45 AM UTC (12:45 PM BST)
 
 jobs:
-     test:
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v2
-          - name: set up Python
-            uses: actions/setup-python@v2
-            with:
-              python-version: '3.13.2'
-          
-          - name: Install dependencies
-            run: |
-              python -m pip install --upgrade pip
-              pip install pytest streamlit
-          - name: Run tests
-            run: |
-              pytest _test.py
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # Update to v3 (v2 is a bit old now)
+
+      - name: Set up Python
+        uses: actions/setup-python@v4  # Update to v4 for better performance and support
+        with:
+          python-version: '3.13.2'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest streamlit
+
+      - name: Run tests
+        run: |
+          pytest _test.py
